@@ -1,0 +1,29 @@
+
+
+First puppet resource
+
+
+1) Create a new user with name 'deploy'
+
+user  { "deploy":
+  ensure      =>  present,
+  uild        =>  5001,
+  password    =>  '$1$DRWSFJBm$OgItqgjb8VYCO0VO2wGUf0',
+  home        =>  '/home/deploy',
+  managehome  =>  'true',
+}
+
+
+
+puppet parser validate user.pp
+puppet apply --nop user.pp
+id deploy   (To confirm the user is present or not)
+
+
+
+
+
+
+
+
+
