@@ -1,5 +1,3 @@
-
-
 First puppet resource
 
 Create a user resource using the below DSL. By default the puppet first checks the /etc/puppet/manifests/site.pp to verify the 
