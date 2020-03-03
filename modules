@@ -1,3 +1,50 @@
 
 
 [root@puppet modules]#puppet module generate nevin-java
+
+The above command shall create a puppet module structure as below
+
+ nevin-java
+│   ├── Gemfile
+│   ├── manifests
+│   │   ├── init.pp
+│   │   └── install.pp
+│   ├── metadata.json
+│   ├── Rakefile
+│   ├── README.md
+│   ├── spec
+│   │   ├── classes
+│   │   │   └── init_spec.rb
+│   │   └── spec_helper.rb
+│   └── tests
+│       └── init.pp
+
+
+install.pp
+
+class java::install {
+
+  package { ['epel-release','java-1.8-openjdk']:
+    ensure => installed,
+  }
+}
+
+You will be able to then invoke the module from manifest files under production/manifests folder.
+
+manifests/app.pp   -> The above call shall install the Openjdk 1.8 version on the nodes named as 'agent'  
+
+
+node 'agent1', 'agent2'  {
+    include java::install
+}
+
+
+
+
+
+
+
+
+
+
+
