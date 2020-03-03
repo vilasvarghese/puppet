@@ -25,9 +25,9 @@ sudo vi /etc/hosts
 Master and Agents
 =================
 
-[root@ip-172-31-47-35 ~]$ sudo yum -y update   
-[root@ip-172-31-47-35 ~]$ sudo yum -y install http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
-[root@ip-172-31-47-35 ~]$ ls /etc/yum.repos.d/  and make sure puppetlabs.repo is available under the mentioned directory
+[root@ip-172.31.37.195 ~]$ sudo yum -y update   
+[root@ip-172.31.37.195 ~]$ sudo yum -y install http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpm
+[root@ip-172.31.37.195 ~]$ ls /etc/yum.repos.d/  and make sure puppetlabs.repo is available under the mentioned directory
 
 
 
@@ -40,8 +40,8 @@ SSH                        TCP          22                         0.0.0.0/0
 Custom TCP Rule            TCP          8140                       0.0.0.0/0
 
 
-[root@ip-172-31-47-35 ~]$ sudo yum -y install puppet-server
-[root@ip-172-31-47-35 ~]$ sudo vi /etc/puppet/puppet.conf
+[root@ip-172.31.37.195 ~]$ sudo yum -y install puppet-server
+[root@ip-172.31.37.195 ~]$ sudo vi /etc/puppet/puppet.conf
 Add below entries under 
 
 [main]
@@ -50,16 +50,16 @@ Add below entries under
     certname=puppet
 
 
-[root@ip-172-31-37-195 opt]$sudo systemctl start puppetmaster
-[root@ip-172-31-37-195 opt]$sudo systemctl enable puppetmaster
+[root@ip-172.31.37.195 opt]$sudo systemctl start puppetmaster
+[root@ip-172.31.37.195 opt]$sudo systemctl enable puppetmaster
 
 
 
 Puppet Agent
 ============
-[root@ip-172-31-47-35 opt]$sudo su -
-[root@ip-172-31-47-35 opt]$sudo yum -y install puppet
-[root@ip-172-31-47-35 opt]$sudo vi /etc/puppet/puppet.conf
+[root@ip-172.31.47.35 opt]$sudo su -
+[root@ip-172.31.47.35 opt]$sudo yum -y install puppet
+[root@ip-172.31.47.35 opt]$sudo vi /etc/puppet/puppet.conf
 
 Update the puppet master details at the agent section
 [agent]
@@ -68,7 +68,7 @@ server = ip-172-31-37-195.ap-south-1.compute.internal
 masterport=8140
 
 
-[root@ip-172-31-47-35 opt]$sudo puppet agent -t
+[root@ip-172.31.47.35 opt]$sudo puppet agent -t
 Info: Caching certificate for ca
 Info: csr_attributes file loading from /etc/puppet/csr_attributes.yaml
 Info: Creating a new SSL certificate request for ip-172-31-47-35.ap-south-1.compute.internal
@@ -79,19 +79,23 @@ Info: Caching certificate for ca
 Puppet Master
 =============
 
-[root@ip-172-31-37-195 ~]$ sudo puppet cert list   [We should see the signing request from the agent. Approve it]
+[root@ip-172.31.37.195 ~]$ sudo puppet cert list   [We should see the signing request from the agent. Approve it]
  "ip-172-31-47-35.ap-south-1.compute.internal" (SHA256) 81:DB:09:FB:D5:6E:3E:69:C6:41:E6:2A:47:96:D8:AB:AE:58:2E:3F:61:CF:40:C7:8B:B9:7D:31:75:80:7A:8A
 
-[root@ip-172-31-37-195 ~]$ sudo puppet cert sign ip-172-31-47-35.ap-south-1.compute.internal
+[root@ip-172.31.37.195 ~]$ sudo puppet cert sign ip-172-31-47-35.ap-south-1.compute.internal
 
 Notice: Signed certificate request for ip-172-31-47-35.ap-south-1.compute.internal
 Notice: Removing file Puppet::SSL::CertificateRequest ip-172-31-47-35.ap-south-1.compute.internal at '/var/lib/puppet/ssl/ca/requests/ip-172-31-47-35.ap-south-1.compute.internal.pem'
 
 
-[root@ip-172-31-47-35 ~]$ sudo systemctl start puppet
-[root@ip-172-31-47-35 ~]$ sudo systemctl enable puppet
+
+Puppet Agent
+=============
+
+[root@ip-172.31.47.35 ~]$ sudo systemctl start puppet
+[root@ip-172.31.47.35 ~]$ sudo systemctl enable puppet
 Created symlink from /etc/systemd/system/multi-user.target.wants/puppet.service to /usr/lib/systemd/system/puppet.service.
-[root@ip-172-31-47-35 ~]$ sudo puppet agent --fingerprint
+[root@ip-172.31.37.195 ~]$ sudo puppet agent --fingerprint
 (SHA256) 0E:00:6A:73:C0:76:10:3C:CA:51:8F:63:C5:0C:00:65:3E:F1:E3:B8:ED:F8:E4:4F:CE:28:3D:AD:25:1A:E5:9B
 
 
