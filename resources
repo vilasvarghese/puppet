@@ -59,6 +59,38 @@ file { '/opt/gitrepo/Hello.java':
 
 
 
+exec
+
+exec { 'download_curl':
+  command => "wget http://apachemirror.wuchna.com/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz",  
+  cwd     => '/var/tmp/hello',
+  path    => '/usr/bin:/user/sbin:/bin:/usr/local/bin',
+  creates => '/opt/apache-maven-3.6.3-bin.tar.gz',  
+  notify  => Exec['extract_maven_zip_file']  
+}
+
+
+exec { 'extract_maven_zip_file':
+  command       => "tar -xvf apache-maven-3.6.3-bin.tar.gz",  
+  cwd           => '/var/tmp/hello',
+  path          => '/usr/bin:/user/sbin:/bin:/usr/local/bin',
+  refresh_only  =>  true
+  cwd           => '/opt/',  
+  user          => 'root',  
+}
+
+
+exec { 'extract_maven_zip_file':
+  command       => "tar -xvf apache-maven-3.6.3-bin.tar.gz",  
+  cwd           => '/var/tmp/hello',
+  path          => '/usr/bin:/user/sbin:/bin:/usr/local/bin',
+  only_if       =>  true
+  cwd           => '/opt/',  
+  user          => 'root',  
+}
+
+
+
 
 
 
