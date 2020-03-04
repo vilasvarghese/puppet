@@ -1,0 +1,30 @@
+By default agents were configured to pull the cataglog from  /etc/puppet/manifests/site.pp. 
+To run a test, you can copy the content below (modify the node name) to site.pp and run 'puppet agent --test'
+
+
+node "ip-172-31-35-58.ap-south-1.compute.internal" {
+
+        user { 'tim':
+                ensure     => present,
+                uid        => '601',
+                shell      => '/bin/bash',
+                home       => '/home/tim'
+        }
+
+        package { 'tree':
+            ensure => installed,
+        }
+        package { ['wget','curl','git']:
+           ensure => installed,
+        }
+        user { 'deployer':
+                ensure => absent,
+        }
+}
+
+If you want to change the environment, you may pass it as argument while running the test using --environment value
+
+For Exp:-  puppet agent --environment=production --t
+
+
+
