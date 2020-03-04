@@ -28,3 +28,18 @@ For Exp:-  puppet agent --environment=production --t
 
 
 
+How to configure Master to pick a location as default
+
+vi /etc/puppet/puppet.conf in master node and append the below section. Based on the environment passed, it will pick the right pp file
+
+[master]
+   manifest    = $confdir/environments/$environment/manifests/site.pp
+   modulepath  = $confdir/environments/$environment/modules
+
+
+
+
+
+
+
+
