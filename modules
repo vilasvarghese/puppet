@@ -41,8 +41,12 @@ The above command shall create a puppet module structure as below
 Under the manifests folder you will see the default manifest file init.pp. 
 
 
+Auto generate Tomcat module
+---------------------------
+
+[root@puppet modules]# puppet module generate nevin-tomcat  --skip-interview  [Incase we don't want to prompt for questions]  
 
 
-
+You will see both java and tomcat modules generated under the modules directory. 
 
 
