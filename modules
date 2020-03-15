@@ -1,14 +1,33 @@
 
+#Modules
 
-[root@puppet modules]#puppet module generate nevin-java
+Modules are the reusable code which bundles the infrastructure code and data (such as facts, files, and templates) in your application.
+It contains the manifests and supporting files to automate ideally one part of your infrastructure.  
 
+For Exp:- A three tier web application containing a Front end loadbalancer, a webserver and an underlying backend DB server could 
+be mapped to muliplr modules. A front end module which install and start a loadbalancer like nginx, a java module to install JDK, a tomcat module which installs and start 
+the tomcat application server and finally a module to install a mysql DB.
+
+We shall try to create two modules from the above problem domain. One module to install java and second one to install tomcat. 
+
+Auto Generate a module using module generator
+----------------------------------------
+We shall use the module generator utility to create a module. The utility expects answers for few questions in order to generate 
+the folder structure. Choose default answers and the module generator shall create the  folder structure for you. 
+
+SSH to puppet master
+
+[root@puppet modules]# cd /etc/puppetlabs/code/environments/production/modules
+
+Use a dash seperated module name, Ideally your puppet forge user account name.
+
+[root@puppet modules]# puppet module generate nevin-java   
 The above command shall create a puppet module structure as below
 
  nevin-java
 │   ├── Gemfile
 │   ├── manifests
 │   │   ├── init.pp
-│   │   └── install.pp
 │   ├── metadata.json
 │   ├── Rakefile
 │   ├── README.md
@@ -19,28 +38,7 @@ The above command shall create a puppet module structure as below
 │   └── tests
 │       └── init.pp
 
-
-install.pp
-
-class java::install {
-
-  package { ['epel-release','java-1.8-openjdk']:
-    ensure => installed,
-  }
-}
-
-You will be able to then invoke the module from manifest files under production/manifests folder.
-
-manifests/app.pp   -> The above call shall install the Openjdk 1.8 version on the nodes named as 'agent'  
-
-
-node 'agent1', 'agent2'  {
-    include java::install
-}
-
-
-
-
+Under the manifests folder you will see the default manifest file init.pp. 
 
 
 
