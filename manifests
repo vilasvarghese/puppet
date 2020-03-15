@@ -1,3 +1,29 @@
 # Manifests
 
-Manifests 
+Manifest is a collection of resources written with a specific objective. It is written with .pp extension 
+
+For Exp:-  Install a particular a software. 
+
+##  Writing your first manifest file
+
+Below manifest install Nginx package and starts the nginx service on the agent machine. Copy the content to site.pp 
+under /etc/puppetlabs/code/environments/production/manifests/  and execute 'puppet agent -t' from the agent node.
+
+
+
+package { 'nginx':
+  ensure => installed,
+}
+
+service { "nginx":
+  ensure => running,
+  enable => true,
+  require => Package["nginx"],
+}
+
+Please note the 'require' property which adds a dependency of the package nginx to be installed prior to service start.
+
+
+
+
+
