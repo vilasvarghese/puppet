@@ -1,15 +1,29 @@
 
+#Class
+
+
+Puppet classes are defined as a collection of resources, which are grouped together in order to get a target node or machine
+in a desired state. These classes are defined inside Puppet manifest files which is located inside Puppet modules.
+
+
 Master 
 
 [ec2-user@puppet ~]#sudo su -
 [root@puppet ~]# cd /etc/puppet/environments/production/
-[root@puppet ~]# mkdir manifests modules
-[root@puppet ~]# cd modules
-[root@puppet ~]# puppet module generate nevin-java
 
-create an install.pp file under modules/nevin-java/
+Go to the java module generated in the previous step. Refer modules section
 
-Copy the below content
+[root@puppet ~]# cd modules/java
+
+Create a file [install.pp] which will be our manifest file and inside the manifest we shall define the class which will encapsulate the 
+code to install java. Standard convention would be to create a class for each feature.  
+
+For Exp:- install.pp to install a software. 
+          deploy.pp to deploy a war file to tomcat
+          ssl.pp to configure SSL 
+
+
+We shall create install.pp to install JDK. Copy below content to install.pp. The namespace here is java.   
 
 class java::install {
  package { ['epel-release','java-1.8-openjdk']:
@@ -17,12 +31,17 @@ class java::install {
   }
 }
 
+Node
+-----
+[root@puppet ~]# cd /etc/puppet/environments/production/manifests
 
-[root@puppet ~]# cd manifests
-[root@puppet ~]# vi app.pp     and paste the below content and save.
+How do we tell puppet the nodes where this manifest need to be applied ? For that we use node definition. 
+
+Create the node definition (Lets say app.pp under manifests directory) and copy the below code which calls the install class. 
+It will be applicable to node1 and node2 and the java will be installed on both the agents.
 
 
-node 'agent' {
+node "node1","node2" {
     include java::install
 }
 
