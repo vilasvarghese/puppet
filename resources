@@ -1,4 +1,19 @@
-First puppet resource
+
+## RESOURCES
+
+Resources are the basic building blocks of puppet. Puppet treats your infrastructure as a collection of entities which is described 
+through resources. In other words, the resources consists of one or more statements which define the configurations of the infrastructure. 
+The resources written using Puppet DSL (Domain specific language). Once we write the DSL, it gets converted into system specific providers which ensure 
+the requested configuration is made on the environment. 
+
+For Exp:-  To add a new user into a client machine, puppet uses the 'user' resource which when executed uses the provider corresponding 
+to the environment. The agent machine might run on different operating systems and to create a user in each operating system is different.
+Puppet ensure that it calls the provider belonging to the underlying operating system and make sure the user is created with the specified
+properties are created.
+
+
+
+# First puppet resource
 
 Create a user resource using the below DSL. By default the puppet first checks the /etc/puppetlabs/code/environments/production/manifests/site.pp 
 to verify the presence of any resource details. You may run it from puppet server (puppet apply filename) or can be triggered from the agent using 
