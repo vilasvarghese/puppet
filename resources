@@ -1,11 +1,11 @@
 First puppet resource
 
-Create a user resource using the below DSL. By default the puppet first checks the /etc/puppet/manifests/site.pp to verify the 
-presence of any resource details. You may run it from puppet server (puppet apply filename) or can be triggered from the agent using 
+Create a user resource using the below DSL. By default the puppet first checks the /etc/puppetlabs/code/environments/production/manifests/site.pp 
+to verify the presence of any resource details. You may run it from puppet server (puppet apply filename) or can be triggered from the agent using 
 'puppet agent -t'.  Once the test is triggered from the agent, validate whether the desired state is attained by the puppet. 
 
 
-Create /etc/puppet/manifests/site.pp if not present. Basic testng of resource types, we could edit this file and test it. 
+Create /etc/puppetlabs/code/environments/production/manifests/site.pp if not present. Basic testng of resource types, we could edit this file and test it. 
 
 
 1) Create a new user with name 'deploy'
