@@ -12,7 +12,6 @@ Puppet ensure that it calls the provider belonging to the underlying operating s
 properties are created.
 
 
-
 # First puppet resource
 
 Create a user resource using the below DSL. By default the puppet first checks the /etc/puppetlabs/code/environments/production/manifests/site.pp 
