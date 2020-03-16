@@ -32,6 +32,9 @@ class java::install {
   }
 }
 
+Once the class is defined, we should be able to access it from the manifest file. Please note that the class is defined under the 
+package java/maifests folder.  
+
 
 Defining Node
 -------------
@@ -39,8 +42,7 @@ Defining Node
 How do we tell puppet which all nodes this manifest need to be applied ? Lets say we want to install the DB only on a set of 
 agents. Node definition is the way to solve this.
 
-
-[root@puppet ~]# cd /etc/puppet/environments/production/manifests
+[root@puppet ~]# cd /etc/puppet/environments/production/manifests/     
 
 
 Create the node definition manifest file (Lets say app.pp under manifests directory) and copy the below code which calls the install class. 
@@ -64,12 +66,20 @@ Puppet shall now throw an error with a description "Could not find node name "de
 As soon as you start using node definition, puppet tries to find a node definition for the agent node. If it does not find a matching
 agent node name, it will see if a default node definition is defined. In order to mitigate this, we could create a default block.
 
+Add the below content in app.pp. Now we have node definition for "puppet-agent1","puppet-agent2" along with default node definition
+
+node "puppet-agent1","puppet-agent2" {
+    include java::install
+}
 
 node default{
     notify { 'Default node definition ': }  
 }
 
+
 The notify resource is very useful for debugging. It prints this message while running the puppet manifest. 
+If you run "puppet agent -t" from any agent which is not defined explicitly (Lets say puppet-agent3), it will print the 
+message 'Default node definition'
 
 
 
