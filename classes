@@ -15,34 +15,45 @@ Go to the java module generated in the previous step. Refer modules section
 
 [root@puppet ~]# cd modules/java
 
-Create a file [install.pp] which will be our manifest file and inside the manifest we shall define the class which will encapsulate the 
+Create a file [install.pp] which will be our manifest file. Inside the manifest we shall define the class which will encapsulate the 
 code to install java. Standard convention would be to create a class for each feature.  
 
 For Exp:- install.pp to install a software. 
           deploy.pp to deploy a war file to tomcat
           ssl.pp to configure SSL 
 
+[root@puppet ~]# cd /etc/puppetlabs/code/environments/production/modules/java/manifests/
 
-We shall create install.pp to install JDK. Copy below content to install.pp. The namespace here is java.   
+Create a file [install.pp] to install JDK. Copy below content to install.pp. The namespace here is java.   
 
 class java::install {
- package { ['epel-release','java-1.8-openjdk']:
+ package { ['epel-release','java-1.8.0-openjdk-devel']:
     ensure => installed,
   }
 }
 
-Node
------
+
+Defining Node
+-------------
+
+How do we tell puppet which all nodes this manifest need to be applied ? Lets say we want to install the DB only on a set of 
+agents. Node definition is the way to solve this.
+
+
 [root@puppet ~]# cd /etc/puppet/environments/production/manifests
 
-How do we tell puppet the nodes where this manifest need to be applied ? For that we use node definition. 
 
-Create the node definition (Lets say app.pp under manifests directory) and copy the below code which calls the install class. 
-It will be applicable to node1 and node2 and the java will be installed on both the agents.
+Create the node definition manifest file (Lets say app.pp under manifests directory) and copy the below code which calls the install class. 
+It will be applicable to puppet-agent1 and puppet-agent2 and the java will be installed on both the agents.
 
 
-node "node1","node2" {
+node "puppet-agent1","puppet-agent2" {
     include java::install
 }
 
+Above definition tells puppet to call the java::install class and apply only on node1 and node2. Whenever the "puppet agent -t" is issued 
+from the agent nodes, it checks whether "java::install" is defined for that node and shall install java in that node.
+
+
+If we run the "puppet agent -t" from puppet-agent1, it will install java on that node. 
 
