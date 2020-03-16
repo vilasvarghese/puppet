@@ -4,8 +4,8 @@
 During infrastructure automation, often we come across use cases where we need to configure a software based  on conditions. It could
 be a verifying a dependency of a module or say a particular software is installed or running. 
 
-For Exp:- In the below manifest file, we need to make sure the nginx package is installed before starting the nginx service. Puppet does 
-not execute the resources in the order defined in the manifest. Due to this behavior, we need to explicitly define dependencies if our 
+For Exp:- In the below manifest file, we need to make sure the nginx package is installed before starting the nginx service. Puppet applies  
+the resources in the order defined in the manifest. Due to this behavior, we need to explicitly define dependencies if our 
 infrastructure code has any.
 
 1) 'require' property - It tells puppet to execute Package["nginx"] (Please note the capital letter used while defining the 'require' 
