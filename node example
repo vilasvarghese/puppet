@@ -1,4 +1,4 @@
-Modify the site.pp under /etc/puppet/manifests/site.pp
+Modify the site.pp under /etc/puppetlabs/code/environments/production/manifests/site.pp
 
 
 
