@@ -51,8 +51,8 @@ node "puppet-agent1","puppet-agent2" {
     include java::install
 }
 
-Above definition tells puppet to call the java::install class and apply only on node1 and node2. Whenever the "puppet agent -t" is issued 
-from the agent nodes, it checks whether "java::install" is defined for that node and shall install java in that node.
+Above definition tells puppet to call the java::install class and apply only on puppet-agent1 and puppet-agent1. Whenever the "puppet agent -t" is issued 
+from the agent nodes, it checks whether "java::install" is defined for that agent and shall install java in that agent.
 
 
 If we run the "puppet agent -t" from puppet-agent1, it will install java on that node. 
