@@ -1,0 +1,81 @@
+
+
+# Create and Install Tomcat
+
+
+We will create two classes.
+
+1) Install tomcat and examples
+   tomcat, tomcat-webapps 
+
+2) Start and enable tomcat service
+
+
+Tomcat Install class
+
+Connect to puppet-master and create the  manifest files to install tomcat.
+
+[root@puppet-master manifests]# cd  /etc/puppetlabs/code/environments/production/modules/tomcat/manifests
+
+1) Create the manifest file install.pp to install tomcat server
+
+install.pp
+
+class tomcat::install {
+     package { ['tomcat','tomcat-webapps']:
+         ensure => installed,
+     }
+}
+
+
+2) Create service.pp to start the service
+
+class tomcat::service {
+  service { "tomcat":
+      ensure => running,
+      enable => true,
+  }
+}
+
+
+We can now call the tomcat classes from the app.pp created earlier ( Check classes section )
+
+Edit app.pp to include the call to invoke tomcat::install and tomcat::service.
+
+node "puppet-agent1","puppet-agent2" {
+    include java::install
+    include tomcat::install
+    include tomcat::service
+}
+
+
+
+Testing
+
+SSH to agent machine (puppet-agent1)  and run "puppet agent -t".  Once puppet applied the catalog, you should be able to access 
+the tomcat url.
+
+http://<puppet-agent-ipaddress>:8080/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
