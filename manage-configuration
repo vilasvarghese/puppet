@@ -1,0 +1,96 @@
+
+# Configure and manage files in a package
+
+In order to apply specific configuration across the agents where a particular package/service is installed, we could create a new 
+module and define the configuration in a centralized location.
+
+
+For Exp:- The tomcat package we installed and started, we might want to configure the JVM parameter. 
+
+We will see how we can address this use case.
+
+1) Create a file directory under the modules/tomcat folder. We shall create the tomcat.conf file and define the configurations we 
+want to apply on the tomcat instance.
+
+[root@puppet-master tomcat]#  cd /etc/puppetlabs/code/environments/production/modules/tomcat
+[root@puppet-master tomcat]#  mkdir files
+[root@puppet-master tomcat]# cd files
+[root@puppet-master tomcat]# vi tomcat.conf
+
+Copy the tomcat.conf content from one of the tomcat installation or you may coopy the below content for testing.
+Please note that I have modified the SHUTDOWN_WAIT="40" which is commented out in standard tomcat installation.
+Once puppet apply the configuration, we should see the value of the config entry modified in the agent nodes.
+
+TOMCAT_CFG_LOADED="1"
+TOMCATS_BASE="/var/lib/tomcats/"
+JAVA_HOME="/usr/lib/jvm/jre"
+CATALINA_HOME="/usr/share/tomcat"
+CATALINA_TMPDIR="/var/cache/tomcat/temp"
+SECURITY_MANAGER="false"
+SHUTDOWN_WAIT="40"
+
+
+We will now create config.pp under /etc/puppetlabs/code/environments/production/modules/tomcat/manifests/  to copy the tomcat.conf file 
+from our centralized location. Please note the path "modules/tomcat/tomcat.conf" defined as source in the file resource. Our tomcat.conf 
+file is present under modules/tomcat/files/tomcat.conf.  We don't need to mention the file directory as puppet will default scan at the 
+files location.
+
+class tomcat::config {
+  # resources
+  file { '/etc/tomcat/tomcat.conf':
+        ensure => file,
+        owner  => tomcat,
+        group  => tomcat,
+        mode   => '0644',
+        source => 'puppet:///modules/tomcat/tomcat.conf',
+  }
+}
+
+
+Modify the app.pp under () to call the config class.
+
+node "puppet-agent1","puppet-agent2" {
+    include java::install
+    include tomcat::install
+    include tomcat::config
+    include tomcat::service
+
+}
+
+Testing 
+
+SSH to puppet-agent1 and run "puppet agent -t".  You will see the diff of the configuration change puppet applied. You can also 
+go to /etc/tomcat/tomcat.conf to make sure the changes you made in the centralized config file is applied on the node.
+
+For Exp:- Below output shows the SHUTDOWN_WAIT="40" is enabled as per the config file we added under the files directory.
+
+[root@puppet-agent1 vagrant]# puppet agent -t
+Info: Using configured environment 'production'
+Info: Retrieving pluginfacts
+Info: Retrieving plugin
+Info: Caching catalog for puppet-agent1
+Info: Applying configuration version '1584360494'
+Notice: /Stage[main]/Tomcat::Config/File[/etc/tomcat/tomcat.conf]/content:
+--- /etc/tomcat/tomcat.conf     2020-03-16 03:11:34.536903777 +0000
++++ /tmp/puppet-file20200316-6693-fr1286        2020-03-16 03:17:46.284096167 +0000
+@@ -28,7 +28,7 @@
+
+ # Time to wait in seconds, before killing process
+ # TODO(stingray): does nothing, fix.
+-# SHUTDOWN_WAIT="40"
++SHUTDOWN_WAIT="40"
+
+ # If you wish to further customize your tomcat environment,
+ # put your own definitions here
+
+
+
+ 
+
+
+
+
+
+
+
+
