@@ -33,7 +33,7 @@ SHUTDOWN_WAIT="40"
 We will now create config.pp under /etc/puppetlabs/code/environments/production/modules/tomcat/manifests/  to copy the tomcat.conf file 
 from our centralized location. Please note the path "modules/tomcat/tomcat.conf" defined as source in the file resource. Our tomcat.conf 
 file is present under modules/tomcat/files/tomcat.conf.  We don't need to mention the file directory as puppet will default scan at the 
-files location.
+files location. We also need to notify the tomcat service if any config changes made to restart using notify resource.
 
 class tomcat::config {
   # resources
@@ -43,6 +43,7 @@ class tomcat::config {
         group  => tomcat,
         mode   => '0644',
         source => 'puppet:///modules/tomcat/tomcat.conf',
+        notify => Service['tomcat'],
   }
 }
 
