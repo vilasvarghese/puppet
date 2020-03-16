@@ -61,9 +61,10 @@ node "puppet-agent1","puppet-agent2" {
 Testing 
 
 SSH to puppet-agent1 and run "puppet agent -t".  You will see the diff of the configuration change puppet applied. You can also 
-go to /etc/tomcat/tomcat.conf to make sure the changes you made in the centralized config file is applied on the node.
+go to /etc/tomcat/tomcat.conf to make sure the changes you made in the centralized config file is applied on the node. The tomcat
+service also will be restarted once the tomcat.conf file is updated.
 
-For Exp:- Below output shows the SHUTDOWN_WAIT="40" is enabled as per the config file we added under the files directory.
+For Exp:- Below output shows the SHUTDOWN_WAIT="40" is enabled as per the config file we added under the files directory. 
 
 [root@puppet-agent1 vagrant]# puppet agent -t
 Info: Using configured environment 'production'
@@ -84,14 +85,5 @@ Notice: /Stage[main]/Tomcat::Config/File[/etc/tomcat/tomcat.conf]/content:
  # If you wish to further customize your tomcat environment,
  # put your own definitions here
 
-
-
- 
-
-
-
-
-
-
-
-
+Info: /Stage[main]/Tomcat::Config/File[/etc/tomcat/tomcat.conf]: Scheduling refresh of Service[tomcat]
+Notice: /Stage[main]/Tomcat::Service/Service[tomcat]: Triggered 'refresh' from 1 events
