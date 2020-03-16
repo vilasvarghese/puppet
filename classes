@@ -57,3 +57,26 @@ from the agent nodes, it checks whether "java::install" is defined for that agen
 
 If we run the "puppet agent -t" from puppet-agent1, it will install java on that node. 
 
+
+What if we try to run it from an agent which is not defined in the node definition? Lets say from puppet-agent3..
+
+Puppet shall now throw an error with a description "Could not find node name "default" or puppet-agent3.....". 
+As soon as you start using node definition, puppet tries to find a node definition for the agent node. If it does not find a matching
+agent node name, it will see if a default node definition is defined. In order to mitigate this, we could create a default block.
+
+
+node default{
+    notify { 'Default node definition ': }  
+}
+
+The notify resource is very useful for debugging. It prints this message while running the puppet manifest. 
+
+
+
+
+
+
+
+
+
+
