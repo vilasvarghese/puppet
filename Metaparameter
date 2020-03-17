@@ -5,15 +5,57 @@ Metaparameters are attributes that work with any resource type. With metaparamet
 
 before:- This resource will be applied before the dependent resources.
 
+  package { 'nginx':
+    before => Service["nginx"]
+    ensure => present,
+  }
+  service { "nginx":
+      ensure => running,
+      enable => true,
+  }
 
 
 notify:- This resource will be applied before the notified resources.If Puppet makes changes to this resource, it will cause all of the
 notified resources to refresh.
 
+  file { 'nginx.conf':
+    ensure => file,
+    mode   => '0644'
+    notify => Service["nginx"],
+  }
+  service { "nginx":
+      ensure => running,
+      enable => true,
+  } 
+
+
 
 require:- The required resources will be applied before this resource.
+
+  package { 'nginx':
+    ensure => present,
+  }
+  service { "nginx":
+      require => Package["nginx"],
+      ensure => running,
+      enable => true,
+  } 
 
 
 
 subscribe:- The subscribed resources will be applied before this resource. If Puppet makes changes to any of the subscribed resources, 
-it will cause this resource to refresh. (Refresh behavior varies by resource type: services will restart, mounts will unmount and re-mount, etc. Not all types can refresh.)
+it will cause this resource to refresh. (Refresh behavior varies by resource type: services will restart, mounts will unmount and 
+re-mount, etc. Not all types can refresh). Below example, the nginx service will be refreshed (restarted) in case puppet modify the
+nginx.conf file.
+
+
+  file { 'nginx.conf':
+     ensure => file,
+     mode   => '0644'
+  }
+  service { "nginx":
+      ensure    => running,
+      enable    => true, 
+      subscribe => File['nginx.conf'],  
+  } 
+
