@@ -1,0 +1,19 @@
+#Metaparameters 
+
+Metaparameters are attributes that work with any resource type. With metaparameters, you can change how Puppet handles specific resources.
+
+
+before:- This resource will be applied before the dependent resources.
+
+
+
+notify:- This resource will be applied before the notified resources.If Puppet makes changes to this resource, it will cause all of the
+notified resources to refresh.
+
+
+require:- The required resources will be applied before this resource.
+
+
+
+subscribe:- The subscribed resources will be applied before this resource. If Puppet makes changes to any of the subscribed resources, 
+it will cause this resource to refresh. (Refresh behavior varies by resource type: services will restart, mounts will unmount and re-mount, etc. Not all types can refresh.)
