@@ -28,9 +28,6 @@ node "ip-172-31-35-58.ap-south-1.compute.internal" {
         }
 }
 
-If you want to change the environment, you may pass it as argument while running the test using --environment value
-
-For Exp:-  puppet agent --environment=production --t
 
 
 Configure puppet.conf file in Puppet Master to set the default environment
@@ -52,8 +49,21 @@ modulepath  = $confdir/environments/$environment/modules
 
 
 
+#Assign nodes to environments via the agent's config file 
+
+You can assign agent nodes to environments by using the agent’s config file. By default, all nodes are assigned to a default
+environment named production.
+
+SSH to agent node and modify /etc/puppetlabs/puppet/puppet.conf to include the environment
+
+[agent]
+environment = production
 
 
+#Overriding the environment during runtime
+If you want to choose an environment during the runtime, you may pass it as argument while running the test using --environment value
+
+For Exp:-  puppet agent --environment=production --t
 
 
 
