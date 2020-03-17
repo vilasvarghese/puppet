@@ -1,4 +1,10 @@
-By default agents were configured to pull the cataglog from  /etc/puppet/manifests/site.pp. 
+# Environments
+
+A Puppet master serves each environment with its own main manifest and module path.
+This lets you use different versions of the same modules for different groups of nodes, which is useful for testing
+changes to your Puppet code before implementing them on production machines.
+
+By default agents were configured to pull the cataglog from  /etc/puppetlabs/code/environments/production/manifests/site.pp. 
 To run a test, you can copy the content below (modify the node name) to site.pp and run 'puppet agent --test'
 
 
@@ -27,14 +33,22 @@ If you want to change the environment, you may pass it as argument while running
 For Exp:-  puppet agent --environment=production --t
 
 
+Configure puppet.conf file in Puppet Master to set the default environment
 
-How to configure Master to pick a location as default
+[main]
+server = puppet.example.com
+environment = production
+confdir = /etc/puppetlabs/puppet
 
-vi /etc/puppet/puppet.conf in master node and append the below section. Based on the environment passed, it will pick the right pp file
+
+We could also configure the puppet.conf to choose the environment based on the environment passed from agent.
+
+vi /etc/puppetlabs/puppet/puppet.conf in master node and append the below section. Based on the environment passed, it will pick
+the right pp file.
 
 [master]
-   manifest    = $confdir/environments/$environment/manifests/site.pp
-   modulepath  = $confdir/environments/$environment/modules
+manifest    = $confdir/environments/$environment/manifests/site.pp
+modulepath  = $confdir/environments/$environment/modules
 
 
 
